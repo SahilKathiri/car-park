@@ -6,5 +6,115 @@
 {% endblock %}
 
 {% block main_block %}
-    <h1>INDEX PAGE!</h1>
+
+    <div id="add_car_modal" class="modal" style="width: 30%">
+        <form class="container" id="login_form" method="post">
+            <div class="modal-content">
+                <h4><i class="material-icons right"><a class="modal-action modal-close waves-effect waves-green">close</a></i>Add Car</h4>
+                    {% csrf_token %}
+                    {{ add_car_form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <button class="btn waves-effect waves-light blue" type="submit" name="add_car" value="submit">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+            <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+            {{ form.media }}
+        </form>
+    </div>
+    <div id="remove_car_modal" class="modal" style="width: 30%">
+        <form class="container" id="login_form" method="post">
+            <div class="modal-content">
+                <h4><i class="material-icons right"><a class="modal-action modal-close waves-effect waves-green">close</a></i>Remove Car</h4>
+                    {% csrf_token %}
+                    {{ remove_car_form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <button class="btn waves-effect waves-light blue" type="submit" name="remove_car" value="submit">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+                <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+            <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+            {{ form.media }}
+        </form>
+    </div>
+    <div class="container" style="padding-top: 15px">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <h4>Number of slots available : {{ slots_available }}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 offset-m6 m6 offset-l8 l4">
+                <a id="add_car" href="#" class="btn waves-effect waves-light red">Add car</a>
+                <a id="remove_car" href="#" class="btn waves-effect waves-light red">Remove car</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12 offset-m3 m6 offset-l3 l6">
+                <h4>Occupied Spaces</h4>
+                <table>
+                    <thead>
+                        <td>Space ID</td>
+                        <td>Car</td>
+                    </thead>
+                    <tbody>
+                        {% for space in occupied_spaces %}
+                            <tr>
+                                <td>{{ space.parking_space }}</td>
+                                <td>{{ space.license_no }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12 offset-m3 m6 offset-l3 l6">
+                <h4>Vacant Spaces</h4>
+                <table>
+                    <thead>
+                        <td>Space ID</td>
+                        <td>Car</td>
+                    </thead>
+                    <tbody>
+                        {% for space in vacant_spaces %}
+                            <tr>
+                                <td>{{ space }}</td>
+                                <td>-</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#add_car').click(function () {
+                $('#add_car_modal').openModal();
+            });
+            $('#remove_car').click(function () {
+                $('#remove_car_modal').openModal();
+            });
+
+            $('#id_out_time_0').attr('data-toggle', 'datepicker');
+            $('#id_out_time_1').attr('placeholder', 'HH:MM:SS (24hr)');
+
+            $('#id_out_time_0').click(function() {
+                $('.datepicker-container').css("z-index", 1500);
+            });
+            $('[data-toggle="datepicker"]').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
 {% endblock %}
