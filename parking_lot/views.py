@@ -24,8 +24,8 @@ def index(request):
                 car = remove_car_form.cleaned_data['car']
                 car.out_time = remove_car_form.cleaned_data['out_time']
                 car.parking_space.occupied = False
+                car.parking_space.save()
                 car.parking_space = None
-
                 car.save()
 
                 time_diff = car.out_time - car.in_time
@@ -47,8 +47,13 @@ def index(request):
     context_dict['slots_available'] = ParkingSpace.objects.filter(occupied=False).count()
     context_dict['add_car_form'] = add_car_form
     context_dict['remove_car_form'] = remove_car_form
-    context_dict['total_cars'] = Car.objects.all().count()
     context_dict['occupied_spaces'] = Car.objects.filter(parking_space__isnull=False)
     context_dict['vacant_spaces'] = ParkingSpace.objects.filter(occupied=False)
     context_dict['free_space'] = ParkingSpace.objects.filter(occupied=False).count()
     return render(request, 'parking_lot/index.html', context_dict)
+
+def car_stats(request):
+    context_dict = {}
+    context_dict['total_cars'] = Car.objects.all().count()
+    context_dict['cars'] = Car.objects.all()
+    return render(request, 'parking_lot/cars.html', context_dict)

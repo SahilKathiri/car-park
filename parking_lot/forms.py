@@ -17,7 +17,7 @@ class AddCarForm(forms.ModelForm):
 
 
 class RemoveCarForm(forms.Form):
-    car = forms.ModelChoiceField(queryset=Car.objects.all())
+    car = forms.ModelChoiceField(queryset=Car.objects.filter(parking_space__isnull=False))
     out_time = forms.SplitDateTimeField()
 
     def __init__(self, *args, **kwargs):
